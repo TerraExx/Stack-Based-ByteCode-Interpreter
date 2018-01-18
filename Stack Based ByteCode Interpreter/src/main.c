@@ -16,7 +16,7 @@ int main(void)
     s_vm_vm*            VirtualMachine;
 
     /* Load Test Script */
-    FilePtr = fopen("C:\\Users\\posavi\\eclipse-workspace\\Stack Based ByteCode Interpreter\\src\\Test_Script.txt", "r");
+    FilePtr = fopen("C:\\Users\\Josip\\eclipse-workspace\\Stack Based ByteCode Interpreter\\src\\Test_Script.txt", "r");
 
     if(FilePtr == NULL)
     {

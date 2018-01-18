@@ -10,8 +10,18 @@ enum
     LOAD,
     STORE,
     RET,
+    ILT,
+    ILTE,
+    IEQ,
+    IGTE,
+    IGT,
+    JMP,
+    JMPT,
+    JMPF,
     IADD,
     ISUB,
+    IMUL,
+    IDIV,
     PRINT,
     HALT
 } e_vm_operationCodes;

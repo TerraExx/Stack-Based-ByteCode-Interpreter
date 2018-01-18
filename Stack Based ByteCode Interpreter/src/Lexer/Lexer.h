@@ -20,8 +20,18 @@ typedef enum
     LOAD_T,
     STORE_T,
     RET_T,
+    ILT_T,
+    ILTE_T,
+    IEQ_T,
+    IGTE_T,
+    IGT_T,
+    JMP_T,
+    JMPT_T,
+    JMPF_T,
     IADD_T,
     ISUB_T,
+    IMUL_T,
+    IDIV_T,
     PRINT_T,
     HALT_T,
     /* KeyWords */
@@ -36,6 +46,7 @@ typedef enum
 	REAL_CONST_T,
 	ASSIGN,
 	COMMA_T,
+	COLON,
 	END_OF_FILE,
 	TOKEN_TYPE_NUM
 } e_lexer_token_type;
@@ -61,6 +72,7 @@ typedef struct
 typedef struct
 {
 	uint8_t*	text;
+	uint8_t*    textStart;
 	uint16_t	current_Pos;
 	uint8_t*	current_Char;
 	uint16_t    line;

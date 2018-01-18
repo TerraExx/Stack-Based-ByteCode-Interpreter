@@ -11,8 +11,18 @@ uint8_t KeyWordString[KEYWORD_NUM][KEY_WORD_MAX_LENGHT] =
 		"LOAD",
 		"STORE",
 		"RET",
+	    "ILT",
+	    "ILTE",
+	    "IEQ",
+	    "IGTE",
+	    "IGT",
+	    "JMP",
+	    "JMPT",
+	    "JMPF",
 		"IADD",
 		"ISUB",
+	    "IMUL",
+	    "IDIV",
 		"PRINT",
 		"HALT",
 		"def",
@@ -29,8 +39,18 @@ uint8_t TokenTypeString[TOKEN_TYPE_NUM][KEY_WORD_MAX_LENGHT] =
         "LOAD_T",
         "STORE_T",
         "RET_T",
+        "ILT_T",
+        "ILTE_T",
+        "IEQ_T",
+        "IGTE_T",
+        "IGT_T",
+        "JMP_T",
+        "JMPT_T",
+        "JMPF_T",
         "IADD_T",
         "ISUB_T",
+        "IMUL_T",
+        "IDIV_T",
         "PRINT_T",
         "HALT_T"
         /* KeyWords */
@@ -44,6 +64,7 @@ uint8_t TokenTypeString[TOKEN_TYPE_NUM][KEY_WORD_MAX_LENGHT] =
         "REAL_CONST",
         "ASSIGN",
         "COMMA",
+        "COLON",
         "END_OF_FILE"
 };
 
@@ -64,6 +85,7 @@ void Lexer_InitKeywords(void)
 void Lexer_Init(s_lexer_lexer* Lexer, uint8_t* text)
 {
 	Lexer->text = text;
+	Lexer->textStart = text;
 
 	Lexer->current_Pos = 0;
 	Lexer->current_Char = text;
@@ -223,6 +245,14 @@ s_lexer_token Lexer_GetNextToken(s_lexer_lexer* Lexer)
         {
             Token.type = ASSIGN;
             strcpy(Token.value.string, (const char*)"=");
+            Lexer_Advance(Lexer);
+            break;
+        }
+
+        if(*Lexer->current_Char == ':')
+        {
+            Token.type = COLON;
+            strcpy(Token.value.string, (const char*)":");
             Lexer_Advance(Lexer);
             break;
         }

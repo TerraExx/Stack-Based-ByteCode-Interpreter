@@ -57,11 +57,40 @@ void VM_DebugPrint( s_vm_vm* VM )
     System_Print("]\n");
 }
 
+void VM_Call( s_vm_vm* VM )
+{
+    uint16_t count;
+
+    /* Push Function to Call Stack */
+    *(VM->callStack + ++VM->cp) = *(VM->stackFrames + *(int32_t*)(VM->code + VM->ip));
+    VM->ip += 4;
+
+    /* Init Parameters */
+    for( count = 0; count < (VM->callStack + VM->cp)->args; count++ )
+    {
+        *((VM->callStack + VM->cp)->local + count) = POP(VM);
+    }
+
+    /* Set Return Address */
+    (VM->callStack + VM->cp)->retAdrress = VM->ip;
+
+    /* Set Ip to Function Jump Address */
+    VM->ip = (VM->callStack + VM->cp)->jumpAdrress;
+}
+
+void VM_Ret( s_vm_vm* VM )
+{
+    /* Set Ip to Function Return Address */
+    VM->ip = (VM->callStack + VM->cp)->retAdrress;
+
+    /* Pop Function from Call Stack */
+    VM->cp--;
+}
+
 void VM_CPU( s_vm_vm* VM )
 {
     int8_t opCode;
     int32_t a,b;
-    uint16_t count;
 
     while(1)
     {
@@ -75,21 +104,7 @@ void VM_CPU( s_vm_vm* VM )
             break;
 
         case CALL:
-            /* Push Function to Call Stack */
-            *(VM->callStack + ++VM->cp) = *(VM->stackFrames + *(int32_t*)(VM->code + VM->ip));
-            VM->ip += 4;
-
-            /* Init Parameters */
-            for( count = 0; count < (VM->callStack + VM->cp)->args; count++ )
-            {
-                *((VM->callStack + VM->cp)->local + count) = POP(VM);
-            }
-
-            /* Set Return Address */
-            (VM->callStack + VM->cp)->retAdrress = VM->ip;
-
-            /* Set Ip to Function Jump Address */
-            VM->ip = (VM->callStack + VM->cp)->jumpAdrress;
+            VM_Call( VM );
             break;
 
         case LOAD:
@@ -103,11 +118,63 @@ void VM_CPU( s_vm_vm* VM )
             break;
 
         case RET:
-            /* Set Ip to Function Return Address */
-            VM->ip = (VM->callStack + VM->cp)->retAdrress;
+            VM_Ret( VM );
+            break;
 
-            /* Pop Function from Call Stack */
-            VM->cp--;
+        case ILT:
+            b = POP(VM);
+            a = POP(VM);
+            PUSH(VM, a < b);
+            break;
+
+        case ILTE:
+            b = POP(VM);
+            a = POP(VM);
+            PUSH(VM, a <= b);
+            break;
+
+        case IEQ:
+            b = POP(VM);
+            a = POP(VM);
+            PUSH(VM, a == b);
+            break;
+
+        case IGTE:
+            b = POP(VM);
+            a = POP(VM);
+            PUSH(VM, a >= b);
+            break;
+
+        case IGT:
+            b = POP(VM);
+            a = POP(VM);
+            PUSH(VM, a > b);
+            break;
+
+        case JMP:
+            VM->ip = *(int32_t*)(VM->code + VM->ip);
+            break;
+
+        case JMPT:
+            if( POP(VM) > 0 )
+            {
+                VM->ip = *(int32_t*)(VM->code + VM->ip);
+            }
+            else
+            {
+                VM->ip += 4;
+            }
+            break;
+
+        case JMPF:
+            if( POP(VM) == 0 )
+            {
+                VM->ip = *(int32_t*)(VM->code + VM->ip);
+            }
+            else
+            {
+                VM->ip += 4;
+            }
             break;
 
         case IADD:
@@ -120,6 +187,18 @@ void VM_CPU( s_vm_vm* VM )
             b = POP(VM);
             a = POP(VM);
             PUSH(VM, a - b);
+            break;
+
+        case IMUL:
+            b = POP(VM);
+            a = POP(VM);
+            PUSH(VM, a * b);
+            break;
+
+        case IDIV:
+            b = POP(VM);
+            a = POP(VM);
+            PUSH(VM, a / b);
             break;
 
         case POP:

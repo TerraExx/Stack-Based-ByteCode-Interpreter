@@ -3,8 +3,11 @@
 #define INTERPRETER_ASSEMBLER_H_
 
 #define CODE_MAX_SIZE   1024
+
 #define STACK_FRAME_ARRAY_MAX_NUM  32
 #define STACK_FRAME_LOCAL_MAX   32
+
+#define LABELS_MAX_NUM  32
 
 typedef struct
 {
@@ -20,8 +23,18 @@ typedef struct
 
 typedef struct
 {
+    uint8_t     name[VAR_NAME_MAX_LENGHT];
+
+    uint16_t    jumpAdrress;
+} s_assembler_label;
+
+typedef struct
+{
 	s_lexer_lexer*	 lexer;
 	s_lexer_token	 current_token;
+
+	s_assembler_label* labels;
+	uint8_t          labelsIdx;
 
 	int8_t*          program;
 	uint8_t          programIdx;

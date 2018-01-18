@@ -1,14 +1,21 @@
-def Add args=2 locals=0
+def Factorial args=1 locals=0
 	LOAD 0
-	LOAD 1
-	IADD
-	PRINT
+	ICONST 1
+	IGT
+	JMPF False
+	LOAD 0
+	LOAD 0
+	ICONST 1
+	ISUB
+	CALL 0
+	IMUL
+	JMP Ret
+False:
+	ICONST 1
+Ret:
 	RET
 def main args=0 locals=2
-	ICONST	3
-	ICONST	4
+	ICONST	5
 	CALL 0
-	ICONST 2
-	ISUB
 	PRINT
 	HALT
