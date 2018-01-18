@@ -1,0 +1,14 @@
+def Add args=2 locals=0
+	LOAD 0
+	LOAD 1
+	IADD
+	PRINT
+	RET
+def main args=0 locals=2
+	ICONST	3
+	ICONST	4
+	CALL 0
+	ICONST 2
+	ISUB
+	PRINT
+	HALT
