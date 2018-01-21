@@ -7,6 +7,7 @@ uint8_t KeyWordString[KEYWORD_NUM][KEY_WORD_MAX_LENGHT] =
 {
         "POP",
 		"ICONST",
+		"F_CONST",
 		"CALL",
 		"LOAD",
 		"STORE",
@@ -23,7 +24,9 @@ uint8_t KeyWordString[KEYWORD_NUM][KEY_WORD_MAX_LENGHT] =
 		"ISUB",
 	    "IMUL",
 	    "IDIV",
+	    "FADD",
 		"PRINT",
+		"F_PRINT",
 		"HALT",
 		"def",
 		"args",
@@ -35,6 +38,7 @@ uint8_t TokenTypeString[TOKEN_TYPE_NUM][KEY_WORD_MAX_LENGHT] =
         /* Mnemonics */
         "POP_T",
         "ICONST_T",
+        "F_CONST_T",
         "CALL_T",
         "LOAD_T",
         "STORE_T",
@@ -51,8 +55,10 @@ uint8_t TokenTypeString[TOKEN_TYPE_NUM][KEY_WORD_MAX_LENGHT] =
         "ISUB_T",
         "IMUL_T",
         "IDIV_T",
+        "FADD_T",
         "PRINT_T",
-        "HALT_T"
+        "F_PRINT_T",
+        "HALT_T",
         /* KeyWords */
         "DEF",
         "ARGS",
@@ -124,8 +130,23 @@ s_lexer_token Lexer_Number(s_lexer_lexer* Lexer)
         Lexer_Advance(Lexer);
     }
 
-    Token.type = INTEGER_CONST_T;
-    Token.value.integer_const = atoi((const char*)Number);
+    if( *Lexer->current_Char == '.' )
+    {
+        do
+        {
+            *(Number_Ptr++) = *Lexer->current_Char;
+            Lexer_Advance(Lexer);
+        }
+        while((Lexer->current_Char != NULL) && isdigit(*Lexer->current_Char));
+
+        Token.type = REAL_CONST_T;
+        Token.value.float_const = strtod((const char*)Number, NULL);
+    }
+    else
+    {
+        Token.type = INTEGER_CONST_T;
+        Token.value.integer_const = atoi((const char*)Number);
+    }
 
     return Token;
 }

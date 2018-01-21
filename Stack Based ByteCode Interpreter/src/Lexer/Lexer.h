@@ -16,6 +16,7 @@ typedef enum
 	/* Mnemonics */
     POP_T,
     ICONST_T,
+    F_CONST_T,
     CALL_T,
     LOAD_T,
     STORE_T,
@@ -32,7 +33,9 @@ typedef enum
     ISUB_T,
     IMUL_T,
     IDIV_T,
+    FADD_T,
     PRINT_T,
+    F_PRINT_T,
     HALT_T,
     /* KeyWords */
 	DEF,

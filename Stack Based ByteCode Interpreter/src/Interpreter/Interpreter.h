@@ -6,6 +6,7 @@ enum
 {
     POP,
     ICONST,
+    F_CONST,
     CALL,
     LOAD,
     STORE,
@@ -22,7 +23,9 @@ enum
     ISUB,
     IMUL,
     IDIV,
+    FADD,
     PRINT,
+    F_PRINT,
     HALT
 } e_vm_operationCodes;
 
@@ -34,6 +37,7 @@ typedef struct
     int16_t    ip;
 
     int32_t*   operandStack;
+    uint8_t*   operandType; /* DEBUG */
     int16_t    sp;
 
     s_assembler_stackFrame* callStack;

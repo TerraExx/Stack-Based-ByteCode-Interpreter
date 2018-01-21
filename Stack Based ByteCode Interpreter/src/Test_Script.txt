@@ -1,21 +1,6 @@
-def Factorial args=1 locals=0
-	LOAD 0
-	ICONST 1
-	IGT
-	JMPF False
-	LOAD 0
-	LOAD 0
-	ICONST 1
-	ISUB
-	CALL 0
-	IMUL
-	JMP Ret
-False:
-	ICONST 1
-Ret:
-	RET
-def main args=0 locals=2
-	ICONST	5
-	CALL 0
-	PRINT
+def main args=0 locals=0
+	ICONST	7
+	F_CONST	2.14
+	F_CONST 3.28
+	FADD
 	HALT

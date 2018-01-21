@@ -12,6 +12,9 @@
                                    ASM->programIdx += 4;                                                                   \
                                    Assembler_Eat( ASM, INTEGER_CONST_T );
 
+#define ADD_OPERAND_FLOAT( ASM )  *((float*)(ASM->program + ASM->programIdx)) = ASM->current_token.value.float_const; \
+                                   ASM->programIdx += 4;                                                                         \
+                                   Assembler_Eat( ASM, REAL_CONST_T );
 
 void Assembler_Init(s_assembler_parser* Assembler, s_lexer_lexer* Lexer )
 {
@@ -242,6 +245,14 @@ void Assembler_Parse(s_assembler_parser* Assembler)
             ADD_OPERAND_INT_32( Assembler )
             break;
 
+        case F_CONST_T:
+            /* Add OpCode */
+            ADD_OPCODE( Assembler, F_CONST_T )
+
+            /* Add Operand */
+            ADD_OPERAND_FLOAT( Assembler )
+            break;
+
         case CALL_T:
             /* Add OpCode */
             ADD_OPCODE( Assembler, CALL_T )
@@ -370,9 +381,19 @@ void Assembler_Parse(s_assembler_parser* Assembler)
             ADD_OPCODE( Assembler, IDIV_T )
             break;
 
+        case FADD_T:
+            /* Add OpCode */
+            ADD_OPCODE( Assembler, FADD_T )
+            break;
+
         case PRINT_T:
             /* Add OpCode */
             ADD_OPCODE( Assembler, PRINT_T )
+            break;
+
+        case F_PRINT_T:
+            /* Add OpCode */
+            ADD_OPCODE( Assembler, F_PRINT_T )
             break;
 
         case HALT_T:
